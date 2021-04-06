@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/oppnys/oppnys/issues"
+  },
+  "dependencies": {
+    "@oppnys/utils": "^1.0.0"
   }
 }

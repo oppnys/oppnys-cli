@@ -3,3 +3,5 @@ packages/**/node_modules
 packages/**/package-lock.json
 .idea
 .vscode
+
+lerna-debug.log
