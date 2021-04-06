@@ -25,5 +25,6 @@
   },
   "dependencies": {
     "@oppnys/utils": "^1.0.1"
-  }
+  },
+  "gitHead": "a164c18e17f8ba8e2d48e89ffee46a9c75f83b46"
 }
