@@ -1,11 +1,14 @@
 {
   "name": "@oppnys/core",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "oppnys core",
   "author": "oppnys <liu6xd@gmail.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/main/packages/core#readme",
   "license": "ISC",
   "main": "lib/core.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -24,7 +27,7 @@
     "url": "https://github.com/oppnys/oppnys/issues"
   },
   "dependencies": {
-    "@oppnys/utils": "^1.0.2"
+    "@oppnys/utils": "^1.0.1"
   },
   "gitHead": "a164c18e17f8ba8e2d48e89ffee46a9c75f83b46"
 }
