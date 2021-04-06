@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "oppnys core",
   "author": "oppnys <liu6xd@gmail.com>",
-  "homepage": "https://github.com/oppnys/oppnys/tree/main/packages/core#readme",
+  "homepage": "https://github.com/oppnys/oppnys/tree/master/packages/core#readme",
   "license": "ISC",
   "main": "lib/core.js",
   "publishConfig": {

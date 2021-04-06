@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "oppnys utils",
   "author": "dongtian <dongtian.liu@dalichain.io>",
-  "homepage": "https://github.com/oppnys/oppnys/tree/main/packages/utils#readme",
+  "homepage": "https://github.com/oppnys/oppnys/tree/master/packages/utils#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "publishConfig": {
