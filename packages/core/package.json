@@ -1,0 +1,26 @@
+{
+  "name": "@oppnys/core",
+  "version": "1.0.0",
+  "description": "oppnys core",
+  "author": "oppnys <liu6xd@gmail.com>",
+  "homepage": "https://github.com/oppnys/oppnys/tree/main/packages/core#readme",
+  "license": "ISC",
+  "main": "lib/core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oppnys/oppnys.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/oppnys/oppnys/issues"
+  }
+}

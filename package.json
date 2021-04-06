@@ -1,0 +1,23 @@
+{
+  "name": "oppnys",
+  "version": "1.0.0",
+  "description": "oppnys is a CLI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oppnys/oppnys.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oppnys/oppnys/issues"
+  },
+  "homepage": "https://github.com/oppnys/oppnys#readme",
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  }
+}
