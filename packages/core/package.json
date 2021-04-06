@@ -1,6 +1,6 @@
 {
   "name": "@oppnys/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "oppnys core",
   "author": "oppnys <liu6xd@gmail.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/main/packages/core#readme",
@@ -24,6 +24,6 @@
     "url": "https://github.com/oppnys/oppnys/issues"
   },
   "dependencies": {
-    "@oppnys/utils": "^1.0.0"
+    "@oppnys/utils": "^1.0.1"
   }
 }
