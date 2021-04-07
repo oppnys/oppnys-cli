@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "oppnys is a CLI",
   "main": "index.js",
+  "workspaces": [
+    "commands/*",
+    "core/*",
+    "models/*",
+    "utils/*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

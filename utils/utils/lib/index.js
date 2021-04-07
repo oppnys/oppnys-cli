@@ -3,5 +3,5 @@
 module.exports = utils;
 
 function utils() {
-    console.log(`this is utils`)
+    console.log(`this is utils/utils`)
 }

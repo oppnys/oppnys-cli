@@ -10,7 +10,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@oppnys/utils": "file:../utils"
+    "@oppnys/utils": "file:../../utils/utils",
+    "import-local": "^3.0.2",
+    "npmlog": "^4.1.2"
   },
   "bin": {
     "oppnys": "bin/index.js"
