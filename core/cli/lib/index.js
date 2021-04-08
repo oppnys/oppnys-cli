@@ -5,6 +5,7 @@ const semver = require('semver')
 const colors = require('colors')
 const userHome = require('user-home')
 const pathExists = require('path-exists').sync
+const {Command} = require('commander')
 const log = require("@oppnys/log")
 
 /**
@@ -15,6 +16,7 @@ const pkg = require('../package.json')
 const constant = require('./const')
 
 let args;
+const program = new Command('program')
 
 async function core() {
     try {
@@ -22,12 +24,43 @@ async function core() {
         checkNodeVersion()
         checkRoot()
         checkUserHome()
-        checkInputArgs()
+        // checkInputArgs()
         checkEnv()
         await checkGlobalUpdate()
+        registerCommand()
     } catch (e) {
         log.error('cli', e.message)
     }
+}
+
+/**
+ * 命令注册
+ */
+function registerCommand() {
+    program
+        .name(Object.keys(pkg.bin)[0])
+        .usage('<command> [options]')
+        .version(pkg.version)
+        .option('-d, --debug', '是否开启调试模式', false)
+
+    // 调试模式监听
+    program.on('option:debug', function () {
+        if (program.opts().debug) {
+            process.env.LOG_LEVEL = 'verbose'
+        } else {
+            process.env.LOG_LEVEL = 'info'
+        }
+        log.level = process.env.LOG_LEVEL
+        log.verbose('test', 'test')
+    })
+
+    // 未知命令监听
+    program.on('option:*', function (){
+        const availableCommands = process.commands
+        log.error('')
+    })
+
+    program.parse(process.argv)
 }
 
 /**
@@ -44,7 +77,7 @@ async function checkGlobalUpdate() {
     const lastVersion = await getNpmSemverVersion(packageName, currentVersion)
     if (lastVersion && semver.gt(lastVersion, currentVersion)) {
         log.warn(
-            colors.yellow('更新提示：',`请手动更新 ${packageName}, 当前版本为: ${currentVersion}, 最新版本为：${lastVersion}
+            colors.yellow('更新提示：', `请手动更新 ${packageName}, 当前版本为: ${currentVersion}, 最新版本为：${lastVersion}
             更新命令： npm install -g ${packageName}`)
         )
     }
@@ -85,7 +118,7 @@ function createDefaultConfig() {
 function checkInputArgs() {
     const minimist = require('minimist')
     args = minimist(process.argv.slice(2))
-    checkArgs()
+    // checkArgs()
 }
 
 /**
@@ -137,7 +170,7 @@ function checkNodeVersion() {
  * 检查版本
  */
 function checkVersion() {
-    log.info('cli', pkg.version)
+    log.success(colors.red(`Current Version ${pkg.version}`))
 }
 
 module.exports = core;
