@@ -10,6 +10,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@oppnys/init": "file:../../commands/init",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
     "@oppnys/log": "file:../../utils/log",
     "colors": "^1.4.0",

@@ -14,6 +14,7 @@ const log = require("@oppnys/log")
  */
 const pkg = require('../package.json')
 const constant = require('./const')
+const init = require('@oppnys/init')
 
 let args;
 const program = new Command('program')
@@ -41,7 +42,12 @@ function registerCommand() {
         .name(Object.keys(pkg.bin)[0])
         .usage('<command> [options]')
         .version(pkg.version)
-        .option('-d, --debug', '是否开启调试模式', false)
+        .option('-d, --debug', '是否开启调试模式', false);
+
+    program
+        .command('init [projectName]')
+        .option('-f --force', '是否强制初始化项目')
+        .action(init);
 
     // 调试模式监听
     program.on('option:debug', function () {
@@ -55,12 +61,20 @@ function registerCommand() {
     })
 
     // 未知命令监听
-    program.on('option:*', function (){
-        const availableCommands = process.commands
-        log.error('')
+    program.on('command:*', function (obj) {
+        const availableCommands = program.commands.map(cmd => cmd.name)
+        log.error(colors.red(`unknown command:${obj[0]}`))
+        if (availableCommands.length > 0) {
+            log.info(colors.red(`available commands：${availableCommands.join(',')}`))
+        }
     })
 
+
     program.parse(process.argv)
+
+    if (program.args && program.args.length < 1) {
+        program.outputHelp()
+    }
 }
 
 /**
@@ -81,9 +95,6 @@ async function checkGlobalUpdate() {
             更新命令： npm install -g ${packageName}`)
         )
     }
-
-
-    // 获取最新版本号， 提示用户更新到该版本
 }
 
 function checkEnv() {
