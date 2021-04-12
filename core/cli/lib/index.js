@@ -15,23 +15,31 @@ const log = require("@oppnys/log")
 const pkg = require('../package.json')
 const constant = require('./const')
 const init = require('@oppnys/init')
+const exec = require('@oppnys/exec')
 
 let args;
 const program = new Command('program')
 
 async function core() {
     try {
-        checkVersion()
-        checkNodeVersion()
-        checkRoot()
-        checkUserHome()
-        // checkInputArgs()
-        checkEnv()
-        await checkGlobalUpdate()
-        registerCommand()
+        await prepare();
+        registerCommand();
     } catch (e) {
         log.error('cli', e.message)
     }
+}
+
+/**
+ * 预检查
+ * @returns {Promise<void>}
+ */
+async function prepare() {
+    checkVersion()
+    checkNodeVersion()
+    checkRoot()
+    checkUserHome()
+    checkEnv()
+    await checkGlobalUpdate()
 }
 
 /**
@@ -42,12 +50,20 @@ function registerCommand() {
         .name(Object.keys(pkg.bin)[0])
         .usage('<command> [options]')
         .version(pkg.version)
-        .option('-d, --debug', '是否开启调试模式', false);
+        .option('-d, --debug', '是否开启调试模式', false)
+        .option('-tp, --targetPath <targetPath>', '是否制定本地调试文件路径', '');
 
     program
         .command('init [projectName]')
         .option('-f --force', '是否强制初始化项目')
-        .action(init);
+        .action(exec);
+
+    // 指定全局的targetPath
+    program.on('option:targetPath', function (){
+        if (program.opts().targetPath) {
+            process.env.CLI_TARGET_PATH = program.opts().targetPath
+        }
+    })
 
     // 调试模式监听
     program.on('option:debug', function () {
@@ -97,6 +113,9 @@ async function checkGlobalUpdate() {
     }
 }
 
+/**
+ * 检查环境
+ */
 function checkEnv() {
     const dotenvPath = path.resolve(userHome, '.env')
     if (pathExists(dotenvPath)) {
@@ -121,27 +140,6 @@ function createDefaultConfig() {
         config['cliHome'] = path.join(userHome, constant.DEFAULT_CLI_HOME)
     }
     process.env.CLI_HOME = config.cliHome
-}
-
-/**
- * 检查入参
- */
-function checkInputArgs() {
-    const minimist = require('minimist')
-    args = minimist(process.argv.slice(2))
-    // checkArgs()
-}
-
-/**
- * 检查
- */
-function checkArgs() {
-    if (args.debug) {
-        process.env.LOG_LEVEL = 'verbose'
-    } else {
-        process.env.LOG_LEVEL = 'info'
-    }
-    log.level = process.env.LOG_LEVEL
 }
 
 /**

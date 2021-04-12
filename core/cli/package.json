@@ -10,14 +10,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@oppnys/init": "file:../../commands/init",
+    "@oppnys/exec": "file:../../core/exec",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
+    "@oppnys/init": "file:../../commands/init",
     "@oppnys/log": "file:../../utils/log",
     "colors": "^1.4.0",
     "commander": "^7.2.0",
     "dotenv": "^8.2.0",
     "import-local": "^3.0.2",
-    "minimist": "^1.2.5",
     "npmlog": "^4.1.2",
     "path-exists": "^4.0.0",
     "root-check": "^1.0.0",
