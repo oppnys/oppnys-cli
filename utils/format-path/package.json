@@ -1,14 +1,14 @@
 {
-  "name": "@oppnys/package",
+  "name": "@oppnys/format-path",
   "version": "1.0.0",
-  "description": "oppnys npm module",
+  "description": "oppnys format path util",
   "keywords": [
-    "oppnys",
-    "npm",
-    "module"
+    "path",
+    "util",
+    "oppnys"
   ],
-  "author": "Liuxd0 <1290381460@qq.com>",
-  "homepage": "https://github.com/oppnys/oppnys/tree/main/core/package#readme",
+  "author": "dongtian <xiaodong.liu@wealedger.com>",
+  "homepage": "https://github.com/oppnys/oppnys/tree/main/core/format-path#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -18,11 +18,6 @@
   "files": [
     "lib"
   ],
-  "dependencies": {
-    "@oppnys/utils": "file:../../utils/utils",
-    "@oppnys/format-path": "file:../../utils/format-path",
-    "pkg-dir": "^5.0.0"
-  },
   "publishConfig": {
     "access": "public"
   },

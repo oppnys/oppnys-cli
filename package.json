@@ -2,7 +2,6 @@
   "name": "oppnys",
   "version": "1.0.0",
   "description": "oppnys is a CLI",
-  "main": "index.js",
   "workspaces": [
     "commands/*",
     "core/*",
@@ -24,6 +23,9 @@
   },
   "homepage": "https://github.com/oppnys/oppnys#readme",
   "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "lerna": "^4.0.0"
   }
 }
