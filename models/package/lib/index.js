@@ -1,7 +1,9 @@
 const path = require('path');
 const pkgDir = require('pkg-dir');
+const npminstall = require('npminstall');
 const { isObject } = require('@oppnys/utils');
 const formatPath = require('@oppnys/format-path');
+const { getDefaultRegistry } = require('@oppnys/get-npm-info');
 
 class Package {
   constructor(options) {
@@ -13,6 +15,8 @@ class Package {
     }
     // package的路径
     this.tatgetPath = options.targetPath;
+    // 缓存路径
+    this.storeDir = options.storeDir;
     // package的名称
     this.packageName = options.packageName;
     // package的版本
@@ -21,14 +25,24 @@ class Package {
 
   // 判断当前Package是否存在
   exists() {
+    console.log('exists');
   }
 
   // 安装Package
   install() {
+    npminstall({
+      root: this.tatgetPath,
+      storeDir: this.storeDir,
+      registry: getDefaultRegistry(true),
+      pkgs: [
+        { name: this.packageName, version: this.packageVersion },
+      ],
+    });
   }
 
   // 更新Package
   update() {
+    console.log('update');
   }
 
   // 获取入口文件路径
@@ -38,7 +52,6 @@ class Package {
     // 如果目录存在
     if (dir) {
       // 读取package.json
-      // eslint-disable-next-line global-require,import/no-dynamic-require
       const pkg = require(path.resolve(dir, 'package.json'));
       // 查找main/lib 入口文件
       const pkgFile = pkg && (pkg.main || pkg.lib);

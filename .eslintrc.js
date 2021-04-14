@@ -12,5 +12,9 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single'],
+    'global-require': 'off',
+    'prefer-rest-params': 'off',
+    'import/no-dynamic-require': 'off',
+    'prefer-spread': 'off',
   },
 };

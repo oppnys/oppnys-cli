@@ -19,8 +19,10 @@
     "lib"
   ],
   "dependencies": {
-    "@oppnys/utils": "file:../../utils/utils",
     "@oppnys/format-path": "file:../../utils/format-path",
+    "@oppnys/utils": "file:../../utils/utils",
+    "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
+    "npminstall": "^4.11.0",
     "pkg-dir": "^5.0.0"
   },
   "publishConfig": {
