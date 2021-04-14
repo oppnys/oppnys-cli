@@ -176,6 +176,9 @@ async function core() {
     await prepare();
     registerCommand();
   } catch (e) {
+    if (program.debug) {
+      console.log(e);
+    }
     log.error('cli', e.message);
   }
 }

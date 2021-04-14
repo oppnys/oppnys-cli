@@ -20,9 +20,12 @@
   ],
   "dependencies": {
     "@oppnys/format-path": "file:../../utils/format-path",
-    "@oppnys/utils": "file:../../utils/utils",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
+    "@oppnys/log": "file:../../utils/log",
+    "@oppnys/utils": "file:../../utils/utils",
+    "fs-extra": "^9.1.0",
     "npminstall": "^4.11.0",
+    "path-exists": "^4.0.0",
     "pkg-dir": "^5.0.0"
   },
   "publishConfig": {

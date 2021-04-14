@@ -3,12 +3,12 @@ const Package = require('@oppnys/package');
 const log = require('@oppnys/log');
 
 const SETTINGS = {
-  init: '@oppnys/init',
+  init: '@imooc-cli/init',
 };
 
 const CACHE_DIR = 'dependencies';
 
-function exec() {
+async function exec() {
   let targetPath = process.env.CLI_TARGET_PATH;
   const homePath = process.env.CLI_HOME;
   log.verbose('targetPath:', targetPath);
@@ -32,12 +32,12 @@ function exec() {
       packageName,
       packageVersion,
     });
-    if (pkg.exists()) {
+    if (await pkg.exists()) {
       // 更新package
-      // pkg.update();
+      await pkg.update();
     } else {
       // 安装package
-      pkg.install();
+      await pkg.install();
     }
   } else {
     pkg = new Package({
@@ -47,7 +47,9 @@ function exec() {
     });
   }
   const rootFile = pkg.getRootFilePath();
-  require(rootFile).apply(null, arguments);
+  if (rootFile) {
+    require(rootFile).apply(null, arguments);
+  }
 }
 
 module.exports = exec;
