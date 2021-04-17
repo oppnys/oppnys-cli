@@ -1,5 +1,12 @@
-function init(projectName, cmdObj) {
-  console.log(`初始化 ${projectName}, 参数 `, cmdObj, process.env.CLI_TARGET_PATH);
+const Command = require('@oppnys/command');
+
+class InitCommand extends Command {
+
 }
 
+function init(argv) {
+  return new InitCommand(argv);
+}
+
+module.exports.InitCommand = InitCommand;
 module.exports = init;

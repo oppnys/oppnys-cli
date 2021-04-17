@@ -1,22 +1,18 @@
 {
-  "name": "@oppnys/init",
+  "name": "@oppnys/command",
   "version": "1.0.0",
-  "description": "oppnys init ",
+  "description": "oppnys command",
   "keywords": [
-    "cli",
     "oppnys",
-    "init"
+    "command"
   ],
-  "author": "oppnys <liu6xd@gmail.com>",
-  "homepage": "https://github.com/oppnys/oppnys/tree/master/core/init#readme",
+  "author": "Liuxd0 <1290381460@qq.com>",
+  "homepage": "https://github.com/oppnys/oppnys/tree/main/core/command#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
-  },
-  "dependencies": {
-    "@oppnys/command": "file:../../models/command"
   },
   "files": [
     "lib"

@@ -49,7 +49,7 @@ async function exec() {
   const rootFile = pkg.getRootFilePath();
   log.verbose('rootFile', rootFile);
   if (rootFile) {
-    require(rootFile).apply(null, arguments);
+    require(rootFile).call(null, Array.from(arguments));
   }
 }
 
