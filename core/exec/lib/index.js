@@ -3,7 +3,7 @@ const Package = require('@oppnys/package');
 const log = require('@oppnys/log');
 
 const SETTINGS = {
-  init: '@imooc-cli/init',
+  init: '@oppnys/init',
 };
 
 const CACHE_DIR = 'dependencies';
@@ -47,6 +47,7 @@ async function exec() {
     });
   }
   const rootFile = pkg.getRootFilePath();
+  log.verbose('rootFile', rootFile);
   if (rootFile) {
     require(rootFile).apply(null, arguments);
   }
