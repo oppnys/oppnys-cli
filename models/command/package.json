@@ -29,5 +29,11 @@
   },
   "bugs": {
     "url": "https://github.com/oppnys/oppnys/issues"
+  },
+  "dependencies": {
+    "@oppnys/log": "file:../../utils/log",
+    "@oppnys/utils": "file:../../utils/utils",
+    "colors": "^1.4.0",
+    "semver": "^7.3.5"
   }
 }

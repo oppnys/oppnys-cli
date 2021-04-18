@@ -16,5 +16,6 @@ module.exports = {
     'prefer-rest-params': 'off',
     'import/no-dynamic-require': 'off',
     'prefer-spread': 'off',
+    'no-underscore-dangle': 'off',
   },
 };

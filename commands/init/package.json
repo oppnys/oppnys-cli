@@ -16,7 +16,11 @@
     "test": "__tests__"
   },
   "dependencies": {
-    "@oppnys/command": "file:../../models/command"
+    "@oppnys/command": "file:../../models/command",
+    "@oppnys/log": "file:../../utils/log",
+    "fs-extra": "^9.1.0",
+    "inquirer": "^8.0.0",
+    "semver": "^7.3.5"
   },
   "files": [
     "lib"
