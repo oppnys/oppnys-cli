@@ -137,21 +137,6 @@ function checkRoot() {
 }
 
 /**
- * 检查node版本号
- */
-function checkNodeVersion() {
-  // 获取当前node版本号
-  const currentVersion = process.version;
-  // 获取兼容最低的版本号
-  const lowestVersion = constant.LOWEST_NODE_VERSION;
-
-  // 2.比对最低版本号
-  if (!semver.gte(currentVersion, lowestVersion)) {
-    throw new Error(colors.red(`Oppnys 需要安装v${lowestVersion} 以上版本的弄node.js, 当前版本为 ${currentVersion}`));
-  }
-}
-
-/**
  * 检查版本
  */
 function checkVersion() {
@@ -164,7 +149,6 @@ function checkVersion() {
  */
 async function prepare() {
   checkVersion();
-  checkNodeVersion();
   checkRoot();
   checkUserHome();
   checkEnv();
