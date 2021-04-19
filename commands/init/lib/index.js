@@ -128,7 +128,7 @@ class InitCommand extends Command {
 
       console.log(o);
     } else if (type === TYPE_COMPONENT) {
-
+      console.log(TYPE_COMPONENT);
     }
     return projectInfo;
   }
