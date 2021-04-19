@@ -19,8 +19,10 @@ class InitCommand extends Command {
   async exec() {
     try {
       // 1. 准备阶段
-      await this.prepare();
+      const projectInfo = await this.prepare();
+      console.log(projectInfo);
       // 2. 下载阶段
+      this.downloadTemplate();
       // 3. 安装模版
     } catch (e) {
       log.error(e.message);
@@ -58,9 +60,16 @@ class InitCommand extends Command {
         }
       }
     }
+    // eslint-disable-next-line consistent-return,no-return-await
+    return await this.getProjectInfo();
+  }
 
-    // eslint-disable-next-line consistent-return
-    await this.getProjectInfo();
+  downloadTemplate() {
+    // 1.通过项目模板API获取项目模板信息
+    // 1.1 通过egg.js搭建后端系统
+    // 1.2 通过npm 存储项目模板
+    // 1.3 将项目模板信息存储到mongodb 数据库中
+    // 1.4 通过egg.js 获取mongodb中的数据并且通过API返回
   }
 
   /**
@@ -68,7 +77,7 @@ class InitCommand extends Command {
    * @returns {Promise<{}>}
    */
   async getProjectInfo() {
-    const projectInfo = {};
+    let projectInfo = {};
     // 1. 选择创建项目或者文件
     const { type } = await inquirer.prompt({
       type: 'list',
@@ -83,7 +92,7 @@ class InitCommand extends Command {
     log.verbose('type', type);
     if (type === TYPE_PROJECT) {
       // 2. 获取项目的基本信息
-      const o = await inquirer.prompt([
+      const project = await inquirer.prompt([
         {
           type: 'input',
           name: 'name',
@@ -125,8 +134,10 @@ class InitCommand extends Command {
           },
         },
       ]);
-
-      console.log(o);
+      projectInfo = {
+        type,
+        ...project,
+      };
     } else if (type === TYPE_COMPONENT) {
       console.log(TYPE_COMPONENT);
     }
