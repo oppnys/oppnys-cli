@@ -8,6 +8,7 @@
   ],
   "dependencies": {
     "@oppnys/log": "file:../../utils/log",
+    "@oppnys/format-path": "file:../../utils/format-path",
     "@oppnys/package": "file:../../models/package"
   },
   "author": "Liuxd0 <1290381460@qq.com>",
