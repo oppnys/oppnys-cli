@@ -20,7 +20,7 @@ class InitCommand extends Command {
     try {
       // 1. 准备阶段
       const projectInfo = await this.prepare();
-      console.log(projectInfo);
+      log.verbose('projectInfo', projectInfo);
       // 2. 下载阶段
       this.downloadTemplate();
       // 3. 安装模版
