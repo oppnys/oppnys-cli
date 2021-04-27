@@ -4,6 +4,7 @@ const inquirer = require('inquirer');
 const semver = require('semver');
 const Command = require('@oppnys/command');
 const log = require('@oppnys/log');
+const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -30,6 +31,13 @@ class InitCommand extends Command {
   }
 
   async prepare() {
+    // 0 判断项目模板是否存在
+    const template = await getProjectTemplate();
+    log.verbose('template', template);
+    if (!template || template.length === 0) {
+      throw new Error('项目模板不存在');
+    }
+    this.template = template;
     // 获取当前命令执行的位置
     const localPath = process.cwd();
     // 1. 判断当前目录是否为空
@@ -65,6 +73,7 @@ class InitCommand extends Command {
   }
 
   downloadTemplate() {
+    console.log(this.projectInfo, this.template);
     // 1.通过项目模板API获取项目模板信息
     // 1.1 通过egg.js搭建后端系统
     // 1.2 通过npm 存储项目模板
@@ -141,6 +150,7 @@ class InitCommand extends Command {
     } else if (type === TYPE_COMPONENT) {
       console.log(TYPE_COMPONENT);
     }
+    this.projectInfo = projectInfo;
     return projectInfo;
   }
 
