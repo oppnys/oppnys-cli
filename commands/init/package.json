@@ -18,10 +18,13 @@
   "dependencies": {
     "@oppnys/command": "file:../../models/command",
     "@oppnys/log": "file:../../utils/log",
+    "@oppnys/package": "file:../../models/package",
     "@oppnys/request": "file:../../utils/request",
+    "@oppnys/utils": "file:../../utils/utils",
     "fs-extra": "^9.1.0",
     "inquirer": "^8.0.0",
-    "semver": "^7.3.5"
+    "semver": "^7.3.5",
+    "user-home": "^3.0.0"
   },
   "files": [
     "lib"

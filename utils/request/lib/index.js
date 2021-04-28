@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = process.env.BASE_URL ? process.env.BASE_URL
+const BASE_URL = process.env.OPPNYS_BASE_URL ? process.env.OPPNYS_BASE_URL
   : 'http://localhost:7001';
 
 const request = axios.create({ baseURL: BASE_URL, timeout: 5000 });

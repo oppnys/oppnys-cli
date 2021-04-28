@@ -1,9 +1,13 @@
 const fs = require('fs');
+const path = require('path');
+const userHome = require('user-home');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
 const semver = require('semver');
 const Command = require('@oppnys/command');
 const log = require('@oppnys/log');
+const Package = require('@oppnys/package');
+const { loading, sleep } = require('@oppnys/utils');
 const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
@@ -20,10 +24,9 @@ class InitCommand extends Command {
   async exec() {
     try {
       // 1. 准备阶段
-      const projectInfo = await this.prepare();
-      log.verbose('projectInfo', projectInfo);
+      this.projectInfo = await this.prepare();
       // 2. 下载阶段
-      this.downloadTemplate();
+      await this.downloadTemplate();
       // 3. 安装模版
     } catch (e) {
       log.error(e.message);
@@ -33,7 +36,7 @@ class InitCommand extends Command {
   async prepare() {
     // 0 判断项目模板是否存在
     const template = await getProjectTemplate();
-    log.verbose('template', template);
+    log.verbose('template', JSON.stringify(template));
     if (!template || template.length === 0) {
       throw new Error('项目模板不存在');
     }
@@ -72,13 +75,43 @@ class InitCommand extends Command {
     return await this.getProjectInfo();
   }
 
-  downloadTemplate() {
-    console.log(this.projectInfo, this.template);
-    // 1.通过项目模板API获取项目模板信息
-    // 1.1 通过egg.js搭建后端系统
-    // 1.2 通过npm 存储项目模板
-    // 1.3 将项目模板信息存储到mongodb 数据库中
-    // 1.4 通过egg.js 获取mongodb中的数据并且通过API返回
+  async downloadTemplate() {
+    log.verbose('download template info: ', JSON.stringify(this.projectInfo));
+    const { projectTemplate } = this.projectInfo;
+    const templateInfo = this.template.find((item) => item.npmName === projectTemplate);
+    const targetPath = path.resolve(userHome, '.oppnys', 'template'); // 生成缓存路径
+    const storeDir = path.resolve(userHome, '.oppnys', 'template', 'node_modules');
+    const { npmName, version } = templateInfo;
+    const templateNpm = new Package({
+      targetPath,
+      storeDir,
+      packageName: npmName,
+      packageVersion: version,
+    });
+    const spinner = loading('fetch template...', '|\\-');
+    try {
+      if (await templateNpm.exists()) {
+        // 更新package
+        await templateNpm.update();
+      } else {
+        // 安装package
+        await templateNpm.install();
+      }
+      await sleep(1500);
+      spinner.stop(true);
+      log.success('fetch template success');
+    } catch (e) {
+      spinner.stop(true);
+      log.error('fetch template failed');
+      throw e;
+    }
+  }
+
+  /**
+   * 创建项目模板清单
+   */
+  createTemplateChoice() {
+    return this.template.map((item) => ({ name: item.name, value: item.npmName }));
   }
 
   /**
@@ -142,6 +175,12 @@ class InitCommand extends Command {
             return v;
           },
         },
+        {
+          type: 'list',
+          name: 'projectTemplate',
+          message: '请选择项目模板',
+          choices: this.createTemplateChoice(),
+        },
       ]);
       projectInfo = {
         type,
@@ -150,7 +189,6 @@ class InitCommand extends Command {
     } else if (type === TYPE_COMPONENT) {
       console.log(TYPE_COMPONENT);
     }
-    this.projectInfo = projectInfo;
     return projectInfo;
   }
 

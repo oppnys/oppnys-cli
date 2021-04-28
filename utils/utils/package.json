@@ -26,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/oppnys/oppnys/issues"
   },
-  "gitHead": "453121eef213d8f72e7c07913d1e0f80e5e76691"
+  "gitHead": "453121eef213d8f72e7c07913d1e0f80e5e76691",
+  "dependencies": {
+    "cli-spinner": "^0.2.10"
+  }
 }
