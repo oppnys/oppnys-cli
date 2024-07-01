@@ -160,7 +160,7 @@ async function core() {
     registerCommand();
   } catch (e) {
     if (program.debug) {
-      console.log(e);
+      log.info(e);
     }
     log.error('cli', e.message);
   }
