@@ -5,7 +5,6 @@
   "author": "oppnys <liu6xd@gmail.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/master/packages/core#readme",
   "license": "ISC",
-  "main": "lib/core.js",
   "publishConfig": {
     "access": "public"
   },
@@ -25,7 +24,7 @@
     "user-home": "^2.0.0"
   },
   "bin": {
-    "oppnys": "bin/index.js"
+    "oppnys-cli": "bin/index.js"
   },
   "directories": {
     "lib": "lib",

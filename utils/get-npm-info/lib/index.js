@@ -8,7 +8,7 @@ function getSemverVersions(baseVersion, versions) {
     .sort((a, b) => semver.gt(b, a));
 }
 
-function getDefaultRegistry(isOrigin = false) {
+function getDefaultRegistry(isOrigin = true) {
   return isOrigin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org/';
 }
 
@@ -26,8 +26,7 @@ function getNpmInfo(packageName, registry = getDefaultRegistry()) {
 async function getNpmVersions(packageName, registry) {
   const data = await getNpmInfo(packageName, registry);
   if (data) {
-    const versions = Object.keys(data.data.versions);
-    return versions;
+    return Object.keys(data.data.versions);
   }
   return [];
 }

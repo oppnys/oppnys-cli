@@ -28,7 +28,7 @@
     "url": "https://github.com/oppnys/oppnys/issues"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^1.7.2",
     "semver": "^7.3.5",
     "url-join": "^4.0.1"
   }

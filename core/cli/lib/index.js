@@ -131,7 +131,6 @@ function checkUserHome() {
  * 检查是否是root账户
  */
 function checkRoot() {
-  // eslint-disable-next-line global-require
   const rootCheck = require('root-check');
   rootCheck();
 }
