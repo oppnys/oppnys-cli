@@ -78,7 +78,7 @@ class InitCommand extends Command {
   async downloadTemplate() {
     log.verbose('download template info: ', JSON.stringify(this.projectInfo));
     const { projectTemplate } = this.projectInfo;
-    const templateInfo = this.template.find((item) => item.npmName === projectTemplate);
+    const templateInfo = this.template.find((item) => item.packName === projectTemplate);
     const targetPath = path.resolve(userHome, '.oppnys', 'template'); // 生成缓存路径
     const storeDir = path.resolve(userHome, '.oppnys', 'template', 'node_modules');
     const { npmName, version } = templateInfo;
