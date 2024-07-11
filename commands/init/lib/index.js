@@ -7,11 +7,17 @@ const semver = require('semver');
 const Command = require('@oppnys/command');
 const log = require('@oppnys/log');
 const Package = require('@oppnys/package');
-const { loading, sleep } = require('@oppnys/utils');
+const {
+  loading,
+  sleep,
+} = require('@oppnys/utils');
 const getProjectTemplate = require('./getProjectTemplate');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
+
+const TEMPLATE_TYPE_NORMAL = 'normal';
+const TEMPLATE_TYPE_CUSTOM = 'custom';
 
 class InitCommand extends Command {
   init() {
@@ -28,9 +34,50 @@ class InitCommand extends Command {
       // 2. 下载阶段
       await this.downloadTemplate();
       // 3. 安装模版
+      await this.installTemplate();
     } catch (e) {
       log.error(e.message);
     }
+  }
+
+  async installTemplate() {
+    if (!this.templateInfo) {
+      throw new Error('模板信息不存在！！！');
+    }
+    const { type = TEMPLATE_TYPE_NORMAL } = this.templateInfo;
+    if (type === TEMPLATE_TYPE_NORMAL) {
+      await this.installNormalTemplate();
+      return;
+    }
+    if (type === TEMPLATE_TYPE_CUSTOM) {
+      await this.installCustomTemplate();
+      return;
+    }
+    throw new Error('模板信息无法识别！！！');
+  }
+
+  async installNormalTemplate() {
+    log.verbose('安装标准模板', this.templateNpm);
+    const { cacheFilePath } = this.templateNpm;
+    const templatePath = path.resolve(cacheFilePath, 'template');
+    const targetPath = process.cwd();
+    const spinner = loading('install template...', '|\\-');
+    try {
+      await sleep(100);
+      fsExtra.ensureDirSync(templatePath, {});
+      fsExtra.ensureDirSync(targetPath, {});
+      fsExtra.copySync(templatePath, targetPath);
+      spinner.stop(true);
+      log.success('template install success');
+    } catch (e) {
+      spinner.stop(true);
+      log.verbose(e.message);
+      throw e;
+    }
+  }
+
+  async installCustomTemplate() {
+    log.verbose('安装自定义模板', this);
   }
 
   async prepare() {
@@ -46,7 +93,7 @@ class InitCommand extends Command {
     // 1. 判断当前目录是否为空
     const ret = this.isDirEmpty(localPath);
     if (!ret) {
-      let ifContinue = false;
+      let ifContinue = true;
       // 2. 是否启动强制更新
       if (!this.force) {
         // 1.1不为空 是否继续创建
@@ -68,6 +115,8 @@ class InitCommand extends Command {
         if (confirmDelete) {
           // 清空当前目录
           fsExtra.emptyDirSync(localPath);
+        } else {
+          process.exit(0);
         }
       }
     }
@@ -81,14 +130,18 @@ class InitCommand extends Command {
     const templateInfo = this.template.find((item) => item.packName === projectTemplate);
     const targetPath = path.resolve(userHome, '.oppnys', 'template'); // 生成缓存路径
     const storeDir = path.resolve(userHome, '.oppnys', 'template', 'node_modules');
-    const { npmName, version } = templateInfo;
+    const {
+      packName,
+      version,
+    } = templateInfo;
     const templateNpm = new Package({
       targetPath,
       storeDir,
-      packageName: npmName,
+      packageName: packName,
       packageVersion: version,
     });
     const spinner = loading('fetch template...', '|\\-');
+    this.templateInfo = templateInfo;
     try {
       if (await templateNpm.exists()) {
         // 更新package
@@ -104,6 +157,8 @@ class InitCommand extends Command {
       spinner.stop(true);
       log.error('fetch template failed');
       throw e;
+    } finally {
+      this.templateNpm = templateNpm;
     }
   }
 
@@ -111,7 +166,10 @@ class InitCommand extends Command {
    * 创建项目模板清单
    */
   createTemplateChoice() {
-    return this.template.map((item) => ({ name: item.name, value: item.npmName }));
+    return this.template.map((item) => ({
+      name: item.name,
+      value: item.packName,
+    }));
   }
 
   /**
@@ -126,8 +184,14 @@ class InitCommand extends Command {
       name: 'type',
       default: TYPE_PROJECT,
       choices: [
-        { name: '项目', value: TYPE_PROJECT },
-        { name: '组件', value: TYPE_COMPONENT },
+        {
+          name: '项目',
+          value: TYPE_PROJECT,
+        },
+        {
+          name: '组件',
+          value: TYPE_COMPONENT,
+        },
       ],
       message: '请选择初始化类型',
     });
