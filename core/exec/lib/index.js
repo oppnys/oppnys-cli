@@ -1,38 +1,13 @@
 const path = require('path');
-const cp = require('child_process');
 const Package = require('@oppnys/package');
 const log = require('@oppnys/log');
+const { execCommand } = require('@oppnys/utils');
 
 const SETTINGS = {
   init: '@oppnys/init',
 };
 
 const CACHE_DIR = 'dependencies';
-
-/**
- * 兼容性方案 当前版本默认支持
- * @returns {Promise<void>}
- */
-// function spawn(command, args, options) {
-//   const win32 = process.platform === 'win32';
-//   const cmd = win32 ? 'cmd' : command;
-//   const cmdArgs = win32 ? ['-c'].concat(command, args) : args;
-//   return cp.spawn(cmd, cmdArgs, options || {});
-// }
-
-/**
- * env parse
- * @param command
- * @param args
- * @param options
- * @returns {ChildProcessWithoutNullStreams}
- */
-function spawn(command, args, options) {
-  const win32 = process.platform === 'win32';
-  const cmd = win32 ? 'cmd' : command;
-  const cmdArgs = win32 ? ['/c'].concat(command, args) : args;
-  return cp.spawn(cmd, cmdArgs, options || {});
-}
 
 async function exec() {
   let targetPath = process.env.CLI_TARGET_PATH;
@@ -89,7 +64,7 @@ async function exec() {
       });
       args[args.length - 1] = o;
       const code = `require('${rootFile}').call(null, ${JSON.stringify(args)})`;
-      const child = spawn('node', ['-e', code], {
+      const child = execCommand('node', ['-e', code], {
         cwd: process.cwd(),
         stdio: 'inherit',
       });

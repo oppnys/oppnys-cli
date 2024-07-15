@@ -7,9 +7,10 @@
     "oppnys"
   ],
   "dependencies": {
-    "@oppnys/log": "file:../../utils/log",
     "@oppnys/format-path": "file:../../utils/format-path",
-    "@oppnys/package": "file:../../models/package"
+    "@oppnys/log": "file:../../utils/log",
+    "@oppnys/package": "file:../../models/package",
+    "@oppnys/utils": "file:../../utils/utils"
   },
   "author": "Liuxd0 <1290381460@qq.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/main/core/exec#readme",

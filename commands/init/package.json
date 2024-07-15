@@ -23,6 +23,7 @@
     "@oppnys/utils": "file:../../utils/utils",
     "fs-extra": "^9.1.0",
     "inquirer": "^8.0.0",
+    "kebab-case": "^1.0.0",
     "semver": "^7.3.5",
     "user-home": "^3.0.0"
   },

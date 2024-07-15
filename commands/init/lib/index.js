@@ -8,6 +8,10 @@ const Command = require('@oppnys/command');
 const log = require('@oppnys/log');
 const Package = require('@oppnys/package');
 const {
+  execAsync,
+  getCommands,
+} = require('@oppnys/utils');
+const {
   loading,
   sleep,
 } = require('@oppnys/utils');
@@ -18,6 +22,29 @@ const TYPE_COMPONENT = 'component';
 
 const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
+
+const WHITE_COMMANDS = ['npm', 'cnpm'];
+
+function checkWhiteCommands(cmd) {
+  if (!WHITE_COMMANDS.includes(cmd)) {
+    throw new Error('The command is not includes in white command list');
+  }
+}
+
+async function execCommand(command) {
+  if (!command) {
+    throw new Error(`The ${command} command is not found!`);
+  }
+  const {
+    cmd,
+    args,
+  } = getCommands(command);
+  checkWhiteCommands(cmd);
+  await execAsync(cmd, args, {
+    cwd: process.cwd(),
+    stdio: 'inherit',
+  });
+}
 
 class InitCommand extends Command {
   init() {
@@ -31,6 +58,7 @@ class InitCommand extends Command {
     try {
       // 1. 准备阶段
       this.projectInfo = await this.prepare();
+      log.verbose('projectInfo', this.projectInfo);
       // 2. 下载阶段
       await this.downloadTemplate();
       // 3. 安装模版
@@ -69,11 +97,20 @@ class InitCommand extends Command {
       fsExtra.copySync(templatePath, targetPath);
       spinner.stop(true);
       log.success('template install success');
+      const {
+        installCommand = '',
+        startCommand = '',
+      } = this.templateInfo;
+      await execCommand(installCommand);
+      await execCommand(startCommand);
     } catch (e) {
       spinner.stop(true);
       log.verbose(e.message);
       throw e;
     }
+  }
+
+  async esjRender() {
   }
 
   async installCustomTemplate() {
@@ -83,7 +120,7 @@ class InitCommand extends Command {
   async prepare() {
     // 0 判断项目模板是否存在
     const template = await getProjectTemplate();
-    log.verbose('template', JSON.stringify(template));
+    log.verbose('remote template list', JSON.stringify(template));
     if (!template || template.length === 0) {
       throw new Error('项目模板不存在');
     }
@@ -201,7 +238,7 @@ class InitCommand extends Command {
       const project = await inquirer.prompt([
         {
           type: 'input',
-          name: 'name',
+          name: 'projectName',
           message: '请输入项目名称',
           default: this.projectName,
           // 项目名称必须以字母开头和字母或数字结尾，只能包含-_两种特殊字符
@@ -253,7 +290,11 @@ class InitCommand extends Command {
     } else if (type === TYPE_COMPONENT) {
       console.log(TYPE_COMPONENT);
     }
-    return projectInfo;
+
+    return {
+      ...projectInfo,
+      className: require('kebab-case')(projectInfo.projectName),
+    };
   }
 
   // 当前文件夹是否为空
