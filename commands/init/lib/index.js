@@ -18,7 +18,6 @@ const {
   sleep,
 } = require('@oppnys/utils');
 const getProjectTemplate = require('./getProjectTemplate');
-const { getFilePackageName } = require('eslint-plugin-import/lib/core/packagePath');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -119,36 +118,31 @@ class InitCommand extends Command {
   }
 
   async esjRender(options) {
-    const dir = process.cwd();
     const { projectInfo } = this;
+    const files = await this.getProjectFiles(options);
     return new Promise((resolve, reject) => {
-      glob('**', {
-        cwd: dir,
-        ignore: options.ignore,
-        nodir: true,
-      }, (err, files) => {
-        console.log(err);
-        if (err) return reject(err);
-        return Promise.all(files.map((file) => {
-          const filePath = path.join(dir, file);
-          console.log('filePath', filePath);
-          return new Promise((resolve1, reject1) => {
-            ejs.renderFile(filePath, projectInfo, {}, (error, ret) => {
-              if (error) {
-                reject1(error);
-              } else {
-                fsExtra.writeFileSync(filePath, ret);
-                resolve1(ret);
-              }
-            });
-          });
-        })).then(() => {
-
-        }).catch((e) => {
-          log.error(e);
+      files.forEach((filePath) => {
+        ejs.renderFile(filePath, projectInfo, {}, (error, ret) => {
+          if (error) {
+            reject(error);
+          } else {
+            fsExtra.writeFileSync(filePath, ret);
+            resolve(ret);
+          }
         });
       });
     });
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async getProjectFiles(options) {
+    const dir = process.cwd();
+    const files = await glob('**', {
+      cwd: dir,
+      ignore: options.ignore,
+      nodir: true,
+    });
+    return files.map((file) => path.join(dir, file));
   }
 
   async installCustomTemplate() {
