@@ -67,6 +67,7 @@ class InitCommand extends Command {
       await this.installTemplate();
     } catch (e) {
       if (process.env.LOG_LEVEL === 'verbose') {
+        // eslint-disable-next-line no-console
         console.log(e);
       }
       log.error(e.message);
@@ -102,7 +103,6 @@ class InitCommand extends Command {
       log.success('template install success');
       spinner.stop(true);
     } catch (e) {
-      console.log(e);
       spinner.stop(true);
       log.verbose(e.message);
       throw e;
@@ -321,6 +321,7 @@ class InitCommand extends Command {
         ...project,
       };
     } else if (type === TYPE_COMPONENT) {
+      // eslint-disable-next-line no-console
       console.log(TYPE_COMPONENT);
     }
 
