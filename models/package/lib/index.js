@@ -81,7 +81,6 @@ class Package {
     const latestFilePath = this.getSpecificCacheFilePath(latestPackageVersion);
     if (!pathExists(latestFilePath)) {
       log.verbose('install ', `path: ${this.targetPath}, name: ${this.packageName}, version: ${latestPackageVersion}`);
-      this.packageVersion = latestPackageVersion;
       return npminstall({
         root: this.targetPath,
         storeDir: this.storeDir,
@@ -91,6 +90,7 @@ class Package {
         ],
       });
     }
+    this.packageVersion = latestPackageVersion;
     return latestPackageVersion;
   }
 

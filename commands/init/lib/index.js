@@ -4,6 +4,8 @@ const userHome = require('user-home');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
 const semver = require('semver');
+const { glob } = require('glob');
+const ejs = require('ejs');
 const Command = require('@oppnys/command');
 const log = require('@oppnys/log');
 const Package = require('@oppnys/package');
@@ -16,6 +18,7 @@ const {
   sleep,
 } = require('@oppnys/utils');
 const getProjectTemplate = require('./getProjectTemplate');
+const { getFilePackageName } = require('eslint-plugin-import/lib/core/packagePath');
 
 const TYPE_PROJECT = 'project';
 const TYPE_COMPONENT = 'component';
@@ -64,6 +67,9 @@ class InitCommand extends Command {
       // 3. 安装模版
       await this.installTemplate();
     } catch (e) {
+      if (process.env.LOG_LEVEL === 'verbose') {
+        console.log(e);
+      }
       log.error(e.message);
     }
   }
@@ -85,7 +91,6 @@ class InitCommand extends Command {
   }
 
   async installNormalTemplate() {
-    log.verbose('安装标准模板', this.templateNpm);
     const { cacheFilePath } = this.templateNpm;
     const templatePath = path.resolve(cacheFilePath, 'template');
     const targetPath = process.cwd();
@@ -95,22 +100,55 @@ class InitCommand extends Command {
       fsExtra.ensureDirSync(templatePath, {});
       fsExtra.ensureDirSync(targetPath, {});
       fsExtra.copySync(templatePath, targetPath);
-      spinner.stop(true);
       log.success('template install success');
-      const {
-        installCommand = '',
-        startCommand = '',
-      } = this.templateInfo;
-      await execCommand(installCommand);
-      await execCommand(startCommand);
+      spinner.stop(true);
     } catch (e) {
+      console.log(e);
       spinner.stop(true);
       log.verbose(e.message);
       throw e;
     }
+    const ignore = ['node_modules/**', 'public/**'];
+    await this.esjRender({ ignore });
+    const {
+      installCommand = '',
+      startCommand = '',
+    } = this.templateInfo;
+    await execCommand(installCommand);
+    await execCommand(startCommand);
   }
 
-  async esjRender() {
+  async esjRender(options) {
+    const dir = process.cwd();
+    const { projectInfo } = this;
+    return new Promise((resolve, reject) => {
+      glob('**', {
+        cwd: dir,
+        ignore: options.ignore,
+        nodir: true,
+      }, (err, files) => {
+        console.log(err);
+        if (err) return reject(err);
+        return Promise.all(files.map((file) => {
+          const filePath = path.join(dir, file);
+          console.log('filePath', filePath);
+          return new Promise((resolve1, reject1) => {
+            ejs.renderFile(filePath, projectInfo, {}, (error, ret) => {
+              if (error) {
+                reject1(error);
+              } else {
+                fsExtra.writeFileSync(filePath, ret);
+                resolve1(ret);
+              }
+            });
+          });
+        })).then(() => {
+
+        }).catch((e) => {
+          log.error(e);
+        });
+      });
+    });
   }
 
   async installCustomTemplate() {
@@ -180,6 +218,7 @@ class InitCommand extends Command {
     const spinner = loading('fetch template...', '|\\-');
     this.templateInfo = templateInfo;
     try {
+      log.verbose('exists', await templateNpm.exists());
       if (await templateNpm.exists()) {
         // 更新package
         await templateNpm.update();
@@ -293,6 +332,7 @@ class InitCommand extends Command {
 
     return {
       ...projectInfo,
+      // eslint-disable-next-line import/no-extraneous-dependencies
       className: require('kebab-case')(projectInfo.projectName),
     };
   }

@@ -9,18 +9,20 @@ function getSemverVersions(baseVersion, versions) {
 }
 
 function getDefaultRegistry(isOrigin = true) {
-  return isOrigin ? 'https://registry.npmjs.org' : 'https://registry.npm.taobao.org/';
+  return isOrigin ? 'https://registry.npmjs.org' : 'https://registry.npmmirror.com';
 }
 
-function getNpmInfo(packageName, registry = getDefaultRegistry()) {
+function getNpmInfo(packageName, registry = getDefaultRegistry(false)) {
   if (!packageName) return null;
   const url = urlJoin(registry, packageName);
-  return axios.get(url).then((resp) => {
-    if (resp.status) {
-      return resp;
-    }
-    return null;
-  }).catch((error) => Promise.reject(error));
+  return axios.get(url)
+    .then((resp) => {
+      if (resp.status) {
+        return resp;
+      }
+      return null;
+    })
+    .catch((error) => Promise.reject(error));
 }
 
 async function getNpmVersions(packageName, registry) {
@@ -43,7 +45,8 @@ async function getNpmSemverVersion(packageName, baseVersion, registry) {
 async function getNpmLatestVersion(npmName = '', registry) {
   const versions = await getNpmVersions(npmName, registry);
   if (versions) {
-    return versions.sort((a, b) => semver.gt(a, b))[0];
+    //  versions.length - 1
+    return versions.sort((a, b) => semver.gt(a, b))[versions.length - 1];
   }
   return null;
 }
