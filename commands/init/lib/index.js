@@ -3,7 +3,6 @@ const path = require('path');
 const userHome = require('user-home');
 const fsExtra = require('fs-extra');
 const inquirer = require('inquirer');
-const semver = require('semver');
 const { glob } = require('glob');
 const ejs = require('ejs');
 const Command = require('@oppnys/command');
@@ -18,9 +17,17 @@ const {
   sleep,
 } = require('@oppnys/utils');
 const getProjectTemplate = require('./getProjectTemplate');
-
-const TYPE_PROJECT = 'project';
-const TYPE_COMPONENT = 'component';
+const {
+  TYPE_PROJECT,
+  TYPE_COMPONENT,
+  notEmptyDir,
+  confirmDelete,
+  projectType,
+  getProjectName,
+  projectVersion,
+  getTemplates,
+  projectDesc,
+} = require('./inquirer-config');
 
 const TEMPLATE_TYPE_NORMAL = 'normal';
 const TEMPLATE_TYPE_CUSTOM = 'custom';
@@ -107,7 +114,8 @@ class InitCommand extends Command {
       log.verbose(e.message);
       throw e;
     }
-    const ignore = ['node_modules/**', 'public/**'];
+    const originIgnore = this.templateInfo.ignore || [];
+    const ignore = ['**/node_modules/**', ...originIgnore];
     await this.esjRender({ ignore });
     const {
       installCommand = '',
@@ -166,22 +174,12 @@ class InitCommand extends Command {
       // 2. 是否启动强制更新
       if (!this.force) {
         // 1.1不为空 是否继续创建
-        ifContinue = (await inquirer.prompt({
-          name: 'ifContinue',
-          type: 'confirm',
-          default: false,
-          message: '当前文件夹不为空，是否继续创建项目？',
-        })).ifContinue;
+        ifContinue = (await inquirer.prompt(notEmptyDir)).notEmptyDir;
       }
       if (!ifContinue) return;
       if (ifContinue || this.force) {
-        const { confirmDelete } = await inquirer.prompt({
-          name: 'confirmDelete',
-          type: 'confirm',
-          default: false,
-          message: '是否确定要清空当前文件夹中的文件？',
-        });
-        if (confirmDelete) {
+        const canDelete = (await inquirer.prompt(confirmDelete)).confirmDelete;
+        if (canDelete) {
           // 清空当前目录
           fsExtra.emptyDirSync(localPath);
         } else {
@@ -249,80 +247,32 @@ class InitCommand extends Command {
   async getProjectInfo() {
     let projectInfo = {};
     // 1. 选择创建项目或者文件
-    const { type } = await inquirer.prompt({
-      type: 'list',
-      name: 'type',
-      default: TYPE_PROJECT,
-      choices: [
-        {
-          name: '项目',
-          value: TYPE_PROJECT,
-        },
-        {
-          name: '组件',
-          value: TYPE_COMPONENT,
-        },
-      ],
-      message: '请选择初始化类型',
-    });
-    log.verbose('type', type);
+    const { type } = await inquirer.prompt(projectType);
+    this.template = this.template.filter((t) => t.tag.includes(type));
     if (type === TYPE_PROJECT) {
       // 2. 获取项目的基本信息
       const project = await inquirer.prompt([
-        {
-          type: 'input',
-          name: 'projectName',
-          message: '请输入项目名称',
-          default: this.projectName,
-          // 项目名称必须以字母开头和字母或数字结尾，只能包含-_两种特殊字符
-          validate: function validate(v) {
-            const done = this.async();
-            setTimeout(() => {
-              if (!/^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)) {
-                done('请输入合法的项目名称！（项目名称只能包含字母数字-_等特殊字符，且必须以字母开头和数字字母结尾）');
-                return;
-              }
-              done(null, true);
-            }, 0);
-          },
-          filter: (v) => v,
-        },
-        {
-          type: 'input',
-          name: 'version',
-          message: '请输入项目的版本',
-          default: '1.0.0',
-          validate: function validate(v) {
-            const done = this.async();
-            setTimeout(() => {
-              if (!semver.valid(v)) {
-                done('请输入合法的版本号！（例如：1.0.0）');
-                return;
-              }
-              done(null, true);
-            }, 0);
-          },
-          filter: (v) => {
-            if (semver.valid(v)) {
-              return semver.valid(v);
-            }
-            return v;
-          },
-        },
-        {
-          type: 'list',
-          name: 'projectTemplate',
-          message: '请选择项目模板',
-          choices: this.createTemplateChoice(),
-        },
+        getProjectName(this.projectName, '项目'), // 项目名称
+        projectVersion('项目'), // 项目版本
+        getTemplates(this.createTemplateChoice(), '项目'), // 模板列表
       ]);
       projectInfo = {
         type,
         ...project,
       };
     } else if (type === TYPE_COMPONENT) {
-      // eslint-disable-next-line no-console
-      console.log(TYPE_COMPONENT);
+      // 2. 获取项目的基本信息
+      const project = await inquirer.prompt([
+        getProjectName(this.projectName, '组件库'), // 项目名称
+        projectVersion('组件库'), // 项目版本
+        projectDesc,
+        getTemplates(this.createTemplateChoice(), '组件库'), // 模板列表
+      ]);
+      projectInfo = {
+        type,
+        ...project,
+      };
+      console.log(projectInfo);
     }
 
     return {
