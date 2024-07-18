@@ -250,11 +250,12 @@ class InitCommand extends Command {
     const { type } = await inquirer.prompt(projectType);
     this.template = this.template.filter((t) => t.tag.includes(type));
     if (type === TYPE_PROJECT) {
+      const typeName = '项目';
       // 2. 获取项目的基本信息
       const project = await inquirer.prompt([
-        getProjectName(this.projectName, '项目'), // 项目名称
-        projectVersion('项目'), // 项目版本
-        getTemplates(this.createTemplateChoice(), '项目'), // 模板列表
+        getProjectName(this.projectName, typeName), // 项目名称
+        projectVersion(typeName), // 项目版本
+        getTemplates(this.createTemplateChoice(), typeName), // 模板列表
       ]);
       projectInfo = {
         type,
@@ -262,11 +263,12 @@ class InitCommand extends Command {
       };
     } else if (type === TYPE_COMPONENT) {
       // 2. 获取项目的基本信息
+      const typeName = '组件库';
       const project = await inquirer.prompt([
-        getProjectName(this.projectName, '组件库'), // 项目名称
-        projectVersion('组件库'), // 项目版本
+        getProjectName(this.projectName, typeName), // 项目名称
+        projectVersion(typeName), // 项目版本
         projectDesc,
-        getTemplates(this.createTemplateChoice(), '组件库'), // 模板列表
+        getTemplates(this.createTemplateChoice(), typeName), // 模板列表
       ]);
       projectInfo = {
         type,
