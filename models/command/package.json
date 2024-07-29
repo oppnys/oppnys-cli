@@ -31,9 +31,10 @@
     "url": "https://github.com/oppnys/oppnys/issues"
   },
   "dependencies": {
-    "@oppnys/log": "file:../../utils/log",
-    "@oppnys/utils": "file:../../utils/utils",
+    "@oppnys/log": "^1.0.5",
+    "@oppnys/utils": "^1.0.5",
     "colors": "^1.4.0",
     "semver": "^7.3.5"
-  }
+  },
+  "gitHead": "95875f2e1c45227278c6ff18feeb37df2ed5ab23"
 }

@@ -9,10 +9,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@oppnys/exec": "file:../../core/exec",
+    "@oppnys/exec": "^1.0.5",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
-    "@oppnys/init": "file:../../commands/init",
-    "@oppnys/log": "file:../../utils/log",
+    "@oppnys/init": "^1.0.5",
+    "@oppnys/log": "^1.0.5",
     "colors": "^1.4.0",
     "commander": "^7.2.0",
     "dotenv": "^8.2.0",
@@ -43,5 +43,5 @@
   "bugs": {
     "url": "https://github.com/oppnys/oppnys/issues"
   },
-  "gitHead": "a164c18e17f8ba8e2d48e89ffee46a9c75f83b46"
+  "gitHead": "95875f2e1c45227278c6ff18feeb37df2ed5ab23"
 }

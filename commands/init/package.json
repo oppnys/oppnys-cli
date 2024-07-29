@@ -16,11 +16,11 @@
     "test": "__tests__"
   },
   "dependencies": {
-    "@oppnys/command": "file:../../models/command",
-    "@oppnys/log": "file:../../utils/log",
-    "@oppnys/package": "file:../../models/package",
-    "@oppnys/request": "file:../../utils/request",
-    "@oppnys/utils": "file:../../utils/utils",
+    "@oppnys/command": "^1.0.5",
+    "@oppnys/log": "^1.0.5",
+    "@oppnys/package": "^1.0.5",
+    "@oppnys/request": "^1.0.5",
+    "@oppnys/utils": "^1.0.5",
     "ejs": "^3.1.10",
     "fs-extra": "^9.1.0",
     "glob": "^11.0.0",
@@ -44,5 +44,6 @@
   },
   "bugs": {
     "url": "https://github.com/oppnys/oppnys/issues"
-  }
+  },
+  "gitHead": "95875f2e1c45227278c6ff18feeb37df2ed5ab23"
 }

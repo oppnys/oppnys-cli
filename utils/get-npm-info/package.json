@@ -1,5 +1,5 @@
 {
-  "name": "get-npm-info",
+  "name": "@oppnys/get-npm-info",
   "version": "1.0.5",
   "description": "get npm package info by package name",
   "keywords": [
@@ -31,5 +31,6 @@
     "axios": "^1.7.2",
     "semver": "^7.3.5",
     "url-join": "^4.0.1"
-  }
+  },
+  "gitHead": "95875f2e1c45227278c6ff18feeb37df2ed5ab23"
 }
