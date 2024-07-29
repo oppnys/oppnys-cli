@@ -1,6 +1,6 @@
 {
   "name": "@oppnys/init",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "oppnys init ",
   "keywords": [
     "cli",
@@ -16,11 +16,11 @@
     "test": "__tests__"
   },
   "dependencies": {
-    "@oppnys/command": "^1.0.5",
-    "@oppnys/log": "^1.0.5",
-    "@oppnys/package": "^1.0.5",
-    "@oppnys/request": "^1.0.5",
-    "@oppnys/utils": "^1.0.5",
+    "@oppnys/command": "^1.1.0",
+    "@oppnys/log": "^1.1.0",
+    "@oppnys/package": "^1.1.0",
+    "@oppnys/request": "^1.1.0",
+    "@oppnys/utils": "^1.1.0",
     "ejs": "^3.1.10",
     "fs-extra": "^9.1.0",
     "glob": "^11.0.0",

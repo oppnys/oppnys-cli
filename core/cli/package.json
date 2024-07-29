@@ -1,6 +1,6 @@
 {
   "name": "@oppnys/core",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "oppnys core",
   "author": "oppnys <liu6xd@gmail.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/master/packages/core#readme",
@@ -9,10 +9,10 @@
     "access": "public"
   },
   "dependencies": {
-    "@oppnys/exec": "^1.0.5",
+    "@oppnys/exec": "^1.1.0",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
-    "@oppnys/init": "^1.0.5",
-    "@oppnys/log": "^1.0.5",
+    "@oppnys/init": "^1.1.0",
+    "@oppnys/log": "^1.1.0",
     "colors": "^1.4.0",
     "commander": "^7.2.0",
     "dotenv": "^8.2.0",

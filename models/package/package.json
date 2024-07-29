@@ -1,6 +1,6 @@
 {
   "name": "@oppnys/package",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "oppnys npm module",
   "keywords": [
     "oppnys",
@@ -19,10 +19,10 @@
     "lib"
   ],
   "dependencies": {
-    "@oppnys/format-path": "^1.0.5",
+    "@oppnys/format-path": "^1.1.0",
     "@oppnys/get-npm-info": "file:../../utils/get-npm-info",
-    "@oppnys/log": "^1.0.5",
-    "@oppnys/utils": "^1.0.5",
+    "@oppnys/log": "^1.1.0",
+    "@oppnys/utils": "^1.1.0",
     "fs-extra": "^9.1.0",
     "npminstall": "^4.11.0",
     "path-exists": "^4.0.0",

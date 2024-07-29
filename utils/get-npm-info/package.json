@@ -1,6 +1,6 @@
 {
   "name": "@oppnys/get-npm-info",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "get npm package info by package name",
   "keywords": [
     "npm",

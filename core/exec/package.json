@@ -1,16 +1,16 @@
 {
   "name": "@oppnys/exec",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "oppnys execute package",
   "keywords": [
     "exec",
     "oppnys"
   ],
   "dependencies": {
-    "@oppnys/format-path": "^1.0.5",
-    "@oppnys/log": "^1.0.5",
-    "@oppnys/package": "^1.0.5",
-    "@oppnys/utils": "^1.0.5"
+    "@oppnys/format-path": "^1.1.0",
+    "@oppnys/log": "^1.1.0",
+    "@oppnys/package": "^1.1.0",
+    "@oppnys/utils": "^1.1.0"
   },
   "author": "Liuxd0 <1290381460@qq.com>",
   "homepage": "https://github.com/oppnys/oppnys/tree/main/core/exec#readme",
